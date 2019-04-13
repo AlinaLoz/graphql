@@ -1,14 +1,11 @@
 const {User} = require('../lib/sequelize');
 
-exports.get = function(req, resp) {
-    const {login} = req.query;
-
-    User.findOne({where: {login}})
-        .then(user => {
-            if (user) {
-                resp.status(200).send({id:user.id, login: user.login});
-            } else {
-                resp.status(404).send({message: "user is not exist"});
-            }})
-        .catch(err => resp.status(404).end());
+exports.get = async ({login}, {idUser}) => {
+  try {
+    const user = await User.findOne({where: {login}});
+    if (!user)  throw new Error("user is not exist");
+    return {id: user.id, login: user.login};
+  }catch(e){
+   return {message: e};
+  }
 };

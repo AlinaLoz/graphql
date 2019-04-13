@@ -87,6 +87,28 @@ class TeamChangeComponent extends Component {
     }
 }
 
+const queries = {
+    teamAdd: (name, users = []) => {
+        return `  
+             mutation CreateTeam {
+                createTeam(name: "${name}", users: []) 
+            }
+        `
+    },
+    checkUser: (login) => {
+        return `
+            {
+                checkUser(login: "${login}") {
+                    id,
+                    login,
+                    message
+                }
+            }
+        `
+    }
+  }
+;
+
 export const TeamCreate = connect(
     state => ({
         userTest        : state.teams.userTest,
@@ -95,8 +117,8 @@ export const TeamCreate = connect(
         fetchCreateTeam : state.teams.fetchCreateTeam,
     }),
     dispatch => ({
-        oncheckUser  : (login) => dispatch(checkExistUser(login)),
-        onCreateTeam : (name, users) => dispatch(createTeam(name, users)),
+        oncheckUser  : (login) => dispatch(checkExistUser(queries.checkUser(login))),
+        onCreateTeam : (name, users) => dispatch(createTeam(queries.teamAdd(name, users))),
         ondropMessage: () => dispatch(dropMessage())
     })
 )(TeamChangeComponent);

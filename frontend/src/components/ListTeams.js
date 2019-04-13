@@ -46,6 +46,26 @@ class ListTeams extends Component{
     }
 }
 
+const queries = {
+  getTeam: `
+     {
+        teamAll {
+          id
+          name
+        }
+     }
+  `,
+  dropTeam: (id) => {
+    return `
+      mutation DropTeam {
+        dropTeam(id: ${id}) {
+          message
+          id
+        }
+      }
+    `
+  }
+};
 
 export default connect(
     state => ({
@@ -53,8 +73,8 @@ export default connect(
         message: state.teams.messageOfDrop
     }),
     dispatch => ({
-        ongetTeams: () => dispatch(getTeams()),
-        ondropTeam: (id) => dispatch(dropTeam(id)),
+        ongetTeams: () => dispatch(getTeams(queries.getTeam)),
+        ondropTeam: (id) => dispatch(dropTeam(queries.dropTeam(id))),
         ondropMessage: () => dispatch(dropMessage())
     })
 )(ListTeams);

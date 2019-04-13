@@ -15,7 +15,7 @@ class TeamChange extends Component {
 
     render() {
         const {ondropMessage, onupdateName} = this.props;
-        const {message, team} = this.props;
+        const {message, team, match} = this.props;
 
         return (
             <Grid className={`team-change`}>
@@ -29,11 +29,33 @@ class TeamChange extends Component {
                 <List>
                     {team && team.users.map((user, index) => <List.Item key={index}>{user.login}</List.Item>)}
                 </List>
-                <Button className={`button-save`} onClick={() => onupdateName(team.id, this.state.name)}>Сохранить</Button>
+                <Button className={`button-save`} onClick={() => onupdateName(match.params.id, this.state.name)}>Сохранить</Button>
             </Grid>
         )
     }
 }
+
+const queries = {
+  getOneTeam: (id) => `
+    {
+      getOneTeam(id: ${id}) {
+        name,
+        id,
+        users {
+          id,
+          login
+        }
+      }
+    }
+  `,
+  updateNameTeam: (id, name) => {
+    return `
+      mutation updateNameTeam {
+        updateNameTeam(id: ${id}, name: "${name}")
+      }
+    `
+  }
+};
 
 export default connect(
     (state, props) => ({
@@ -41,8 +63,8 @@ export default connect(
         message  : state.teams.messageOfCreate,
     }),
     dispatch => ({
-        ongetOneTeam: (id) => dispatch(getOneTeam(id)),
+        ongetOneTeam: (id) => dispatch(getOneTeam(queries.getOneTeam(id))),
         ondropMessage: () => dispatch(dropMessage()),
-        onupdateName: (id, name) => dispatch(updateName(id, name)),
+        onupdateName: (id, name) => dispatch(updateName(queries.updateNameTeam(id, name))),
     })
 )(TeamChange);

@@ -1,96 +1,101 @@
 import {Xhr} from "../../helpers/Xhr";
 import {ACTIONS} from "../constans";
 
-export const getTeams = () => dispatch => {
-    dispatch({type: ACTIONS.TEAM.GET.RQ});
-    Xhr.getTeams().then(resp => {
+export const getTeams = (query) => async dispatch => {
+    try {
+        dispatch({type: ACTIONS.TEAM.GET.RQ});
+        const data = await Xhr.apiCall({query, auth: true});
         dispatch({
-            type:ACTIONS.TEAM.GET.SC,
-            data: resp
+            type: ACTIONS.TEAM.GET.SC,
+            data: data.data.teamAll
         })
-    }).catch(err => {
+    } catch (e) {
         dispatch({
             type: ACTIONS.TEAM.GET.FL,
-            data: err
+            data: e
         })
-    });
+    }
 };
 
-export const checkExistUser = (login) => dispatch => {
-    dispatch({type: ACTIONS.TEAM.USER_TEST.RQ});
-    Xhr.checkExistUser(login).then(resp => {
+export const checkExistUser = (query) => async dispatch => {
+    try {
+        dispatch({type: ACTIONS.TEAM.USER_TEST.RQ});
+        const data = await Xhr.apiCall({query, auth: true});
         dispatch({
             type: ACTIONS.TEAM.USER_TEST.SC,
-            data: resp
+            data: data.data.checkUser,
         })
-    }).catch(err => {
-        console.log('error');
+    } catch (e) {
         dispatch({
             type: ACTIONS.TEAM.USER_TEST.FL,
-            data: err
+            data: e
         })
-    });
+    }
 };
 
-export const createTeam = (name, users) => dispatch => {
-    dispatch({type: ACTIONS.TEAM.CREATE.RQ});
-    Xhr.createTeam(name, users).then(resp => {
+export const createTeam = (query) => async dispatch => {
+    try {
+        dispatch({type: ACTIONS.TEAM.CREATE.RQ});
+        const data = await Xhr.apiCall({query, auth: true});
         dispatch({
             type: ACTIONS.TEAM.CREATE.SC,
-            data: resp
+            data: data.data.createTeam
         })
-    }).catch(err => {
+    } catch (e) {
         dispatch({
             type: ACTIONS.TEAM.CREATE.FL,
-            data: err
+            data: e
         })
-    });
+    }
 };
 
-export const dropTeam = (id) => dispatch => {
-    dispatch({type: ACTIONS.TEAM.DROP.RQ});
-
-    Xhr.dropTeam(id).then(resp => {
+export const dropTeam = (query) => async dispatch => {
+    try {
+        dispatch({type: ACTIONS.TEAM.DROP.RQ});
+        const data = await Xhr.apiCall({query, auth: true});
         dispatch({
             type: ACTIONS.TEAM.DROP.SC,
-            data: resp
+            data: data.data.dropTeam
         })
-    }).catch(err => {
+    } catch (e) {
         dispatch({
             type: ACTIONS.TEAM.DROP.FL,
-            data: err
+            data: e
         })
-    });
+    }
 };
 
-export const getOneTeam = (id) => dispatch => {
-    Xhr.getOneTeam(id).then(resp => {
+export const getOneTeam = (query) => async dispatch => {
+    try {
+        const data = await Xhr.apiCall({query, auth: true});
+        const {users, name, id} = data.data.getOneTeam;
         dispatch({
             type: ACTIONS.ONE_TEAM.GET.SC,
-            data: {...resp.team},
+            data: {users, name},
             id
         })
-    }).catch(err => {
+    } catch (e) {
         dispatch({
             type: ACTIONS.ONE_TEAM.GET.FL,
-            data: err
+            data: e
         })
-    });
+    }
 };
 
-
-export const updateName = (id, name) => dispatch => {
-    Xhr.updateNameTeam(id, name).then(resp => {
+export const updateName = (query) => async dispatch => {
+    try {
+        const data = await Xhr.apiCall({query, auth: true});
+        console.log(data);
         dispatch({
             type: ACTIONS.ONE_TEAM.UPDATE_NAME.SC,
-            data: resp,
+            data: data.data.updateNameTeam
         })
-    }).catch(err => {
+    } catch (e) {
         dispatch({
             type: ACTIONS.ONE_TEAM.UPDATE_NAME.FL,
-            data: err
+            data: e
         })
-    });
+    }
 };
 
 export const dropMessage = (id) => dispatch => {

@@ -1,88 +1,69 @@
 const {User, Team} = require('../lib/sequelize');
 
-exports.get = function(req, resp) {
-    User.findByPk(parseInt(req.id))
-        .then(user => {
-            user.getTeams().then(teams => resp.status(200).send(teams.map(team => ({
-                id: team.id,
-                name: team.name
-            }))));
-        })
-        .catch(err => {
-            console.log(err);
-            resp.status(401).end();
-        });
+exports.get = async ({idUser}) => {
+  const user = await User.findByPk(parseInt(idUser));
+  if (!user) return [];
+  const teams = await user.getTeams();
+  return teams.map(team => ({
+    id: team.id,
+    name: team.name
+  }));
 };
 
-exports.getById = function(req, resp) {
-    console.log(parseInt(req.params.id));
-    Team.findByPk(parseInt(req.params.id))
-        .then( team => {
-            User.findAll({
-                include: [{
-                    model: Team,
-                    where: { id: req.params.id }
-                }]
-            }).then(users => {
-                const filterUsers = users.map(user => {return {id: user.id, login: user.login}});
-                resp.send(200, {team: {name: team.name, id: team.id, users: filterUsers}});
-            });
-        })
-        .catch(err => {
-            console.log(err);
-            resp.status(500).end();
-        });
+exports.getById = async ({id}, {idUser}) => {
+  const team = await Team.findByPk(parseInt(id));
+  if (!team) return {};
+  const users = await User.findAll({
+    include: [{
+      model: Team,
+      where: {id}
+    }]
+  });
+  const resultUsers = users.map(user => {
+    return {id: user.id, login: user.login}
+  });
+  return {name: team.name, id: team.id, users: resultUsers};
 };
 
-
-exports.teamAdd = function(req, resp) {
-    const {name, users} = req.body;
-
-    User.findByPk(parseInt(req.id))
-        .then(user => {
-            Team.findOne({where: {name}})
-                .then(item => {
-                    if (item) return resp.status(400).send({message: "this team exist"});
-                    Team.create({name})
-                        .then(team => {
-                            users.forEach(id => User.findByPk(id).then(user => user.addTeam(team)));
-                            user.addTeam(team).then(user => resp.status(201).send({message: "team is created"}))
-                        })
-                        .catch(err => resp.status(500).end({messages: err}));
-                })
-                .catch(err => resp.status(500).end({messages: err}));
-        })
-        .catch(err => {
-            console.log(err);
-            return resp.status(401).end();
-        });
+exports.teamAdd = async ({name, users}, {idUser}) => {
+  try {
+    const user = await User.findByPk(parseInt(idUser));
+    if (!user) return user;
+    const team = await Team.findOne({where: {name}});
+    if (team) return  "this team exist";
+    const newTeam = await Team.create({name});
+    users.forEach(async id => {
+      const user = await User.findByPk(id);
+      user.addTeam(newTeam);
+    });
+    await user.addTeam(newTeam);
+    return  "team is created";
+  }
+  catch(e) {
+    return 'error';
+  }
 };
 
-exports.delete = function(req, resp) {
-    const {id} = req.body;
-
-    User.findByPk(parseInt(req.id))
-        .then(user => {
-            Team.findByPk(id)
-                .then(team => {
-                    if (!team) resp.status(400).send({message: "this team is not exist"});
-                    team.destroy().then(_ =>  resp.status(200).send({id, message: "team has been droped"}));
-                })
-                .catch(_ => resp.status(500).end());
-        })
-        .catch(err => {
-            console.log(err);
-            return resp.status(401).end();
-        });
+exports.delete = async ({id}, {idUser}) => {
+    try {
+      const user = await User.findByPk(parseInt(idUser));
+      const team = await Team.findByPk(id);
+      if (!team) return {message: "this team is not exist"};
+      const result = await team.destroy();
+      return {id, message: "team has been droped"};
+    }catch (e){
+      return {message: e};
+    }
 };
 
-exports.put = function(req, resp) {
-    //переделать чтоб айди был в строке запроса
-    const {id, name} = req.body;
-    Team.findByPk(parseInt(id))
-        .then(team => {
-            if (!team) resp.status(400).send({message: "this team is not exist"});
-            team.update({name: name}).then(_ =>  resp.send(200, {message: "изменения сохранены"}));
-        })
-        .catch(_ => resp.send(500));
-    };
+exports.put = async ({id, name}, {idUser}) => {
+  //переделать чтоб айди был в строке запроса
+  try {
+    const team = await Team.findByPk(parseInt(id));
+    if (!team) return "this team is not exist";
+    await team.update({name: name});
+    return "изменения сохранены";
+  } catch (e) {
+    return e;
+  }
+};

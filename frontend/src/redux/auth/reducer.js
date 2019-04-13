@@ -13,17 +13,19 @@ export default function auth(state = initState, action) {
 			localStorage.removeItem('token');
 			return {...state, auth: false, token: ""};
 		case ACTIONS.USER.AUTH: {
-			const {auth} = action.data;
+			const {auth, token} = action.data;
 			localStorage.setItem('auth', auth);
-			return {...state, auth};
+			localStorage.setItem('token', token);
+			return {...state, auth, token};
 		}
 		case ACTIONS.USER.LOGIN.RQ:
 			return {...state};
-		case ACTIONS.USER.LOGIN.SC:
+		case ACTIONS.USER.LOGIN.SC: {
 			const {token, auth} = action.data;
 			localStorage.setItem('token', token);
 			localStorage.setItem('auth', 'true');
 			return {...state, token, auth, message : {negative: false}};
+		}
 		case ACTIONS.USER.LOGIN.FL:
 			const {data} = action;
 			localStorage.removeItem('token');

@@ -5,18 +5,19 @@
   "dependencies": {
     "apollo-cache-inmemory": "^1.0.0",
     "apollo-client": "^2.0.1",
+    "apollo-fetch": "^0.7.0",
     "apollo-link": "^1.0.0",
     "apollo-link-error": "^1.0.0",
     "apollo-link-http": "^1.0.0",
     "graphql": "^0.11.7",
     "graphql-tag": "^2.5.0",
-    "react-apollo": "^2.0.0",
     "import": "0.0.6",
     "lodash": "^4.17.11",
     "npm": "^6.9.0",
     "prop-types": "^15.7.2",
     "query": "^0.2.0",
     "react": "^16.7.0",
+    "react-apollo": "^2.0.0",
     "react-dom": "^16.7.0",
     "react-form-with-constraints": "^0.11.0",
     "react-inputs-validation": "^2.2.0",
@@ -41,6 +42,7 @@
     "not op_mini all"
   ],
   "devDependencies": {
+    "axios": "^0.18.0",
     "react-redux": "^6.0.0",
     "react-router-dom": "^4.3.1",
     "react-validation": "^3.0.7",

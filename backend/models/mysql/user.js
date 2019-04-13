@@ -46,15 +46,7 @@ exports.User = (sequelize, type) => {
 					//resp.status(401).send({ auth: false, token: null });
 
 					const token = jwt.sign({ id: user.id }, conf.token.secret, {expiresIn: conf.token.tokenLife});
-					const refreshToken = jwt.sign({ id: user.id }, conf.token.refreshSecret, {expiresIn: conf.token.refreshTokenLife});
-
-					const authUser = new AuthUser({token, refreshToken});
-
-					authUser.save(function(err){
-						// this.disconnect();
-						if(err) return console.log(err);
-					});
-					return resolve({ auth: true, token: token, refreshToken: refreshToken});
+					return resolve({ auth: true, token});
 			});
 		});
 	};

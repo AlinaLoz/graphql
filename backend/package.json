@@ -25,10 +25,13 @@
     "sequelize": "^4.42.0"
   },
   "dependencies": {
+    "apollo-server": "^2.4.8",
+    "apollo-server-express": "^2.4.8",
     "balanced-match": "^1.0.0",
     "bcrypt": "^3.0.4",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.3",
+    "body-parser-graphql": "^1.1.0",
     "crypto": "^1.0.1",
     "express-bearer-token": "^2.2.0",
     "express-cors": "0.0.3",
@@ -38,6 +41,7 @@
     "mysql": "^2.5.2",
     "mysql2": "^1.6.5",
     "redis": "^2.8.0",
+    "restify": "^8.3.0",
     "sequelize": "^4.42.0"
   }
 }

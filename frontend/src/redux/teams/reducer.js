@@ -35,7 +35,7 @@ export default function teams(state = initState, action) {
         case ACTIONS.TEAM.CREATE.RQ:
             return {...state, fetchCreateTeam: true};
         case ACTIONS.TEAM.CREATE.SC:
-            return {...state, fetchCreateTeam: false, messageOfCreate: {positive: true, info: action.data.message}};
+            return {...state, fetchCreateTeam: false, messageOfCreate: {positive: true, info: action.data}};
         case ACTIONS.TEAM.CREATE.FL:
             return {...state, fetchCreateTeam: false, messageOfCreate: {positive: false, info: "bad request"}};
 
@@ -46,7 +46,7 @@ export default function teams(state = initState, action) {
         }
 
         case ACTIONS.ONE_TEAM.UPDATE_NAME.SC:{
-            return {...state, messageOfCreate: {positive: true, info: action.data.message}};
+            return {...state, messageOfCreate: {positive: true, info: action.data}};
         }
         case ACTIONS.ONE_TEAM.UPDATE_NAME.FL:{
             return {...state, messageOfCreate: {positive: false, info: "bad request"}};

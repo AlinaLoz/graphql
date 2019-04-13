@@ -34,27 +34,25 @@ class HomePage extends React.Component {
 					<Route path='/register' component={Register}/>
 					{!auth && <Route component={Login}/>}
 					{/*<Route path={'/profile'} component={Profile} />*/}
-					{/*<Route path={'/team/change'} component={TeamCreate}/>*/}
-					{/*<Route path={'/team/:id'} component={Team}/>*/}
-					{/*<Route path={'/team'} component={ListTeams} />*/}
-					{/*<Route path={'/board/:id'} component={Board}/>*/}
-					{/*<Route path={'/board'} component={ListBoards}/>*/}
+					<Route path={'/team/change'} component={TeamCreate}/>
+					<Route path={'/team/:id'} component={Team}/>
+					<Route path={'/team'} component={ListTeams} />
+					<Route path={'/board/change'} component={Board}/>
+					<Route path={'/boards'} component={ListBoards}/>
 				</Switch>
 			</React.Fragment>
 		)
 	}
 }
 
-
-const repoQuery = gql`
+let query = `
   {
-  	auth
+  	  auth {
+					auth
+					token
+				}
   }
 `;
-
-// export default graphql(
-// 	repoQuery
-// )(withApollo(withRouter(HomePage)));
 
 export default withRouter(
 	connect(
@@ -62,7 +60,7 @@ export default withRouter(
 			auth: state.auth.auth
 		}),
 		dispatch => ({
-			onfetchAuth: () => dispatch(fetchAuth())
+			onfetchAuth: () => dispatch(fetchAuth(query))
 		})
 	)(HomePage)
 );

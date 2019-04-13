@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {connect} from "react-redux";
 import {Button, Input, Grid, Message, Icon} from "semantic-ui-react";
 import {fetchLogin} from "../redux/auth/actions";
+import gql from "graphql-tag";
 
 class Login extends Component {
 	state = {
@@ -56,6 +57,15 @@ class Login extends Component {
 		)
 	}
 }
+
+// let makeQuery = function(login, password) {
+// 	return `query {
+//     login(login: ${login}, password: ${password}) {
+//       auth
+//       token
+//     }
+//   }`;
+// };
 
 export default connect(
 	state => ({
