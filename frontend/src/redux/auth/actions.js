@@ -12,7 +12,7 @@ export const fetchLogin = (login, password) => async dispatch => {
 	} catch (e) {
 		dispatch({
 			type: ACTIONS.USER.LOGIN.FL,
-			data: e.data
+			data: e.message
 		})
 	}
 };
@@ -36,6 +36,7 @@ export const fetchAuth = (query) => async dispatch => {
 
 export const logOut = () => dispatch => {
 	localStorage.removeItem('token');
+	localStorage.removeItem('auth');
 };
 
 

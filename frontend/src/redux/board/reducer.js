@@ -15,7 +15,7 @@ export default function teams(state = initState, action) {
         case ACTIONS.BOARD.GET_ALL.RQ:
             return {...state, fetching: true};
         case ACTIONS.BOARD.GET_ALL.SC:
-            return {...state, ...action.data, fetching: false, message: {negative: false}};
+            return {...state, boards: action.data, fetching: false, message: {negative: false}};
         case ACTIONS.BOARD.GET_ALL.FL:
             return {...state, fetching: false, message: {info: action.data, negative: true}};
 
@@ -24,6 +24,7 @@ export default function teams(state = initState, action) {
         case ACTIONS.BOARD.CREATE.SC:
             return {...state, ...action.data, fetching: false, message: {negative: false}};
         case ACTIONS.BOARD.CREATE.FL:
+            console.log(action.data);
             return {...state, fetching: false, message: {info: action.data, negative: true}};
         case ACTIONS.BOARD.MESSAGE:
             return {...state, message: {}};

@@ -1,24 +1,18 @@
 import React, {Component} from 'react';
 import {connect} from "react-redux";
 import {Button, Grid, Header, Icon, Message, List} from "semantic-ui-react";
-import {dropMessage, getBoards} from "../redux/board/actions";
+import {dropBoard, dropMessage, getBoards} from "../redux/board/actions";
 
 class ListBoards extends Component{
     componentWillMount() {
-    }
-
-    componentDidMount() {
-      const {teams} = this.props;
-      if (!teams.length) {
-
-      }
+      const {ongetBoards} = this.props;
+      ongetBoards();
     }
 
     render(){
         const {boards, message, teams} = this.props;
-        const {ondropMessage} = this.props;
+        const {ondropMessage, ondropBoard} = this.props;
 
-//onClick={() => onEmitDropBoard(board.id)}
         const teamName = board => teams.length  && board.ownerIsTeam ?  `(${teams.find(t => t.id == board.teamId).name})` : '';
         return (
           <Grid>
@@ -35,7 +29,7 @@ class ListBoards extends Component{
                       </List.Content>
                       <List.Content className={`content-button`}>
                           <Button className={`button-drop-team`} >
-                              <Icon name="close"/>
+                              <Icon name="close" onClick={() => ondropBoard(board.id)}/>
                           </Button>
                       </List.Content>
                   </List.Item>)}
@@ -55,16 +49,16 @@ const queries = {
         }
      }
   `,
-  // dropTeam: (id) => {
-  //   return `
-  //     mutation DropTeam {
-  //       dropTeam(id: ${id}) {
-  //         message
-  //         id
-  //       }
-  //     }
-  //   `
-  // }
+  dropBoard: (id) => {
+    return `
+      mutation DropBoard {
+        dropBoard(idBoard: ${id}) {
+          message
+          id
+        }
+      }
+    `
+  }
 };
 
 export default connect(
@@ -74,7 +68,8 @@ export default connect(
         teams   : state.teams.teams,
     }),
     dispatch => ({
-      ongetBoard: () => dispatch(getBoards(queries.getBoards)),
+      ongetBoards: () => dispatch(getBoards(queries.getBoards)),
+      ondropBoard: (id) => dispatch(dropBoard(queries.dropBoard(id))),
       ondropMessage: () => dispatch(dropMessage())
     })
 )(ListBoards);

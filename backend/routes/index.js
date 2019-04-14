@@ -1,15 +1,20 @@
-module.exports = function (app) {
-  app.get('/api/v1.0/login', require('./login').get);
-  app.post('/api/v1.0/register', require('./register').post);
+const graphqlHTTP = require('express-graphql');
+const schema = require('../graphql/schema');
+const resolver = require('../graphql/resolver');
 
-  app.use(require('../middleware/tokenChecker'));
+const tokenChecker =  require('../middleware/tokenChecker');
 
-  app.get('/api/v1.0/secure', (req,res) => {
-    // all secured routes goes here
-    res.send('I am secured...')
-  });
+module.exports = (app) => {
+  app.get('/login', require('../routes/login').get);
+  app.post('/register', require('../routes/register').post);
 
-
-  app.get('/api/v1.0/team/board', require('./board').get);
-  app.get('/api/v1.0/user/check', require('./user').get);
+  app.post('/graphql', tokenChecker, graphqlHTTP(req => ({
+    schema: schema,
+    rootValue: resolver,
+    context: {
+      idUser:req.id,
+      token :req.token,
+    },
+    graphiql: true
+  })));
 };

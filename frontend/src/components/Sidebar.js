@@ -15,7 +15,7 @@ const NavbarComponent = ({history, onlogOut}) => {
 				<Menu.Item as={'a'} onClick={() => history.push('/profile')}>
 					<Icon name='user'/>
 					<span>Профиль</span>
-					<Icon name={`log out`} onClick={() => onlogOut()}/>
+					<Icon name={`log out`} onClick={() => {onlogOut();	window.location.reload();}}/>
 				</Menu.Item>
 				<Menu.Item as={'a'} onClick={() => history.push('/team')}>
 					<Icon name='group'/>

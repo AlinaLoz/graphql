@@ -12,7 +12,7 @@ export const getTeams = (query) => async dispatch => {
     } catch (e) {
         dispatch({
             type: ACTIONS.TEAM.GET.FL,
-            data: e
+            data: e.message
         })
     }
 };
@@ -28,7 +28,7 @@ export const checkExistUser = (query) => async dispatch => {
     } catch (e) {
         dispatch({
             type: ACTIONS.TEAM.USER_TEST.FL,
-            data: e
+            data: e.message
         })
     }
 };
@@ -44,7 +44,7 @@ export const createTeam = (query) => async dispatch => {
     } catch (e) {
         dispatch({
             type: ACTIONS.TEAM.CREATE.FL,
-            data: e
+            data: e.message
         })
     }
 };
@@ -60,7 +60,7 @@ export const dropTeam = (query) => async dispatch => {
     } catch (e) {
         dispatch({
             type: ACTIONS.TEAM.DROP.FL,
-            data: e
+            data: e.message
         })
     }
 };
@@ -77,7 +77,7 @@ export const getOneTeam = (query) => async dispatch => {
     } catch (e) {
         dispatch({
             type: ACTIONS.ONE_TEAM.GET.FL,
-            data: e
+            data: e.message
         })
     }
 };
@@ -93,7 +93,7 @@ export const updateName = (query) => async dispatch => {
     } catch (e) {
         dispatch({
             type: ACTIONS.ONE_TEAM.UPDATE_NAME.FL,
-            data: e
+            data: e.message
         })
     }
 };

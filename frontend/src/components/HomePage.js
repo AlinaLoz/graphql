@@ -4,16 +4,12 @@ import Login from "./Login";
 import Register from "./Register";
 import {connect} from "react-redux";
 import Navbar from "./Sidebar";
-import Profile from "./Profile";
 import Team from "./TeamChange";
 import ListTeams from "./ListTeams";
 import ListBoards from "./ListBoards";
 import Board from "./Board";
 import {fetchAuth} from "../redux/auth/actions";
 import {TeamCreate} from "./TeamCreate";
-
-import gql from 'graphql-tag';
-import {graphql, withApollo} from 'react-apollo';
 
 class HomePage extends React.Component {
 	intervalAuth = null;

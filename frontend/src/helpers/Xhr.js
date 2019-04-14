@@ -1,14 +1,11 @@
 const BASE_URL = 'http://localhost:4000';
 const GRAPHQL_URL = '/graphql';
 
-
-
 class Xhr {
 	static buildHeaders(auth) {
 		let headers = {};
 		headers['Content-type'] = 'application/json';
     if (auth) {
-      // headers['Content-type'] = 'application/graphql';
 			headers['Authorization'] = localStorage.getItem('token');
 		}
 		return headers;
@@ -26,12 +23,11 @@ class Xhr {
 		return fetch(BASE_URL + url, options)
 		.then(resp => resp.json())
 		.then(data => {
-			if (data.errors) throw new Error(data.errors);
+			if (data.hasOwnProperty('errors')) throw new Error(data.errors[0].message);
 			return data;
 		})
     .catch(err => {
-			console.log(err);
-			return err;
+			throw err;
 		});
 	}
 }

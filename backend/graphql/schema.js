@@ -5,7 +5,8 @@ const schema = buildSchema(`
       createTeam(name: String!, users: [InputUser]): String!
       dropTeam(id: ID): Message
       updateNameTeam(id: ID, name: String): String!
-      createBoard(name: String!, isTeamBoard: Boolean, team: Team) : String!
+      createBoard(name: String!, isTeamBoard: Boolean, team: ID) : BoardOutput
+      dropBoard(idBoard: ID): Message
     } 
     
     type Query { 
@@ -28,8 +29,8 @@ const schema = buildSchema(`
     }
     
     type User {
-      id   : ID,
-      login: String,
+      id     : ID,
+      login  : String,
       message: String
     }
      
@@ -37,6 +38,14 @@ const schema = buildSchema(`
       id: ID,
       name: String, 
       ownerIsTeam: Boolean
+    }
+    
+    type BoardOutput {
+      id: ID,
+      name: String,
+      ownerIsTeam: Boolean,
+      userId: Int,
+      teamId: Int,
     }
     
     input InputUser {

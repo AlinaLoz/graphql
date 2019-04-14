@@ -2,9 +2,9 @@ import React, {Component} from 'react';
 import {connect} from "react-redux";
 import {Button, Checkbox, Dropdown, Form, Grid, Header, Input, Label, Message} from "semantic-ui-react";
 import {
-    dropMessage, getBoards,
+  createBoard,
+  dropMessage,
 } from "../redux/board/actions";
-import {List} from "semantic-ui-react/dist/commonjs/elements/List";
 import {getTeams} from "../redux/teams/actions";
 
 class Board extends Component {
@@ -26,22 +26,24 @@ class Board extends Component {
 
         if (this.props.message !== message) {
             if (!message.negative) {
-                this.props.history.push('/board');
+                this.props.history.push('/boards');
             }
         }
     }
 
     render(){
-        const {onEmitCreateBoard, ondropMessage, message, teams} = this.props;
+        const {onCreateBoard, ondropMessage, message, teams} = this.props;
         const {name, isTeamBoard, team} = this.state;
 
         const filterTeams = teams.map(team => ({key: team.id, text: team.name, value: team.id}));
 
+        console.log(message);
+
         return (
             <Grid className={`board-create`}>
-                {/*<Message hidden={Object.keys(message).length < 2} onDismiss={ondropMessage}>*/}
-                {/*    <Message.Header>{message.info}</Message.Header>*/}
-                {/*</Message>*/}
+                <Message hidden={Object.keys(message).length < 2} onDismiss={ondropMessage}>
+                    <Message.Header>{message.info}</Message.Header>
+                </Message>
                 <Header>Создать доску</Header>
                 <Form>
                     <Input className={`board-name`}>
@@ -61,7 +63,7 @@ class Board extends Component {
                        onChange={(e, data) => this.setState({team: data.value})}
                        options={filterTeams}
                      />
-                    <Button className={`button-save`} onClick={() => onEmitCreateBoard(name, isTeamBoard, team)}>Создать</Button>
+                    <Button className={`button-save`} onClick={() => onCreateBoard(name, isTeamBoard, team)}>Создать</Button>
                 </Form>
             </Grid>
         )
@@ -77,9 +79,17 @@ const queries = {
         }
      }
   `,
-   createBoard: (name, isTeamBoard, team) => {
+   createBoard: (name, isTeamBoard, team = -1) => {
         return `
-             mutation CreateBoard(name: "${name}", isTeamBoard: ${isTeamBoard}, team: ${team})
+             mutation CreateBoard {
+               createBoard (name: "${name}", isTeamBoard: ${isTeamBoard}, team: ${team || -1}) {
+                 id,
+                 name
+                 ownerIsTeam,
+                 userId,
+                 teamId
+               }
+             }
         `
    }
 };
